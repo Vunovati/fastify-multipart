@@ -149,10 +149,11 @@ function fastifyMultipart (fastify, options, done) {
     })
   }
 
-  let throwFileSizeLimit = true
-  if (typeof options.throwFileSizeLimit === 'boolean') {
-    throwFileSizeLimit = options.throwFileSizeLimit
-  }
+  // This is not needed as this conversion is already done on line 410
+  //  if (typeof options.throwFileSizeLimit === 'boolean') {
+  //    console.log('REACHED')
+  //    throwFileSizeLimit = options.throwFileSizeLimit
+  //  }
 
   const PartsLimitError = createError('FST_PARTS_LIMIT', 'reach parts limit', 413)
   const FilesLimitError = createError('FST_FILES_LIMIT', 'reach files limit', 413)
@@ -402,6 +403,7 @@ function fastifyMultipart (fastify, options, done) {
         return
       }
 
+      let throwFileSizeLimit = true // move it where it's first needed
       if (typeof opts.throwFileSizeLimit === 'boolean') {
         throwFileSizeLimit = opts.throwFileSizeLimit
       }
