@@ -246,7 +246,7 @@ test('should throw on file save error', async function (t) {
   }
 })
 
-test('should throw on request files cleanup error', async function (t) {
+test('should not throw on request files cleanup error', async function (t) {
   t.plan(2)
 
   const fastify = Fastify()
@@ -269,7 +269,11 @@ test('should throw on request files cleanup error', async function (t) {
     try {
       await req.saveRequestFiles({ toID })
       // temp file saved, remove before the onResponse hook
-      await unlink(tempFilePath)
+      try {
+        await unlink(tempFilePath)
+      } catch (error) {
+        test.error(error, 'should delete file before the cleanRequestFiles does')
+      }
       reply.code(200).send()
     } catch (error) {
       reply.code(500).send()
